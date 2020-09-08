@@ -4,12 +4,25 @@ Fetch the dependencies:
 ```bash
 $ pip install -r requirements.txt
 ```
-A Google API key with the YouTube Data V3 API scope set as YOUTUBE_API_KEY is required to be set in the environment.
+
+**THE FOLLOWING INSTRUCTIONS WILL AFFECT PRODUCTION DATA IF THE TABLE_ID HAS NOT BEEN CHANGED**
+
+**If any changes need to be made to the shape of the data, copy the dataset in BigQuery and test your changes against the duplicate**
+
+To run the portion of the function doing the work, you will need to invoke it from the python repl.
 ```bash
-$ YOUTUBE_API_KEY="API KEY HERE" python fetch_campfire_statistics.py
+$ GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account.json" python
+Python 3.8.5 (default, Aug  5 2020, 08:22:02) 
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import main
+>>> from datetime import datetime
+>>> current_time = datetime.utcnow().isoformat(timespec="seconds") + "Z"
+>>> main.run(current_time)
 ```
 
 ## Setting up the development container
+**This is only neccessary if you prefer not to set up a local python toolchain**
 
 Follow these steps to open the repo in the development container:
 
