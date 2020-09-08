@@ -14,12 +14,8 @@ import base64
 api_service_name = "youtube"
 api_version = "v3"
 
-# In the future we may want to be able to make this payload variable
+# In the future we may want to be able to make this variable through the event payload
 campfire_playlist_id = "PLRPsQ54HdnfpxM6jE4nJZs-MosDBixHe1"
-
-# For whatever reason, Python doesn't add the Z to the end of an ISO8601 formatted string, which violates the spec.
-# https://stackoverflow.com/questions/19654578/python-utc-datetime-objects-iso-format-doesnt-include-z-zulu-or-zero-offset
-# date_collected = datetime.utcnow().isoformat(timespec="seconds") + "Z"
 
 def get_video_id_from_playlist_item(playlist_item):
     return playlist_item["snippet"]["resourceId"]["videoId"]
@@ -110,6 +106,8 @@ def gather_youtube_stats(event, context):
     # TODO: We should implement some sort of logic to notify (maybe via slack) in the event the function fails.
     if "data" in event:
         data = base64.b64decode(event["data"]).decode("utf-8")
+        # Currently the only message we're expecting. "weekly" meaning the weekly data collection. This message should be triggered from
+        # Google Cloud Scheduler.
         if data == "weekly":
             run(context.timestamp)
             print("Completed data transfer to bigquery")
